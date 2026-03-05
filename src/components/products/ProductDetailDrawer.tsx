@@ -20,12 +20,13 @@ interface Props {
   afterOpenChange?: (open: boolean) => void
 }
 
+// 将底层 5 档风险映射为 3 档展示：低风险 / 中风险 / 高风险
 const riskLevelMap: Record<string, { label: string; color: string }> = {
-  conservative: { label: '保守', color: 'green' },
-  stable: { label: '稳健', color: 'blue' },
-  balanced: { label: '平衡', color: 'gold' },
-  aggressive: { label: '积极', color: 'orange' },
-  radical: { label: '激进', color: 'red' },
+  conservative: { label: '低风险', color: 'green' },
+  stable: { label: '低风险', color: 'green' },
+  balanced: { label: '中风险', color: 'orange' },
+  aggressive: { label: '高风险', color: 'red' },
+  radical: { label: '高风险', color: 'red' },
 }
 
 export default function ProductDetailDrawer({ productId, open, onClose, afterOpenChange }: Props) {
