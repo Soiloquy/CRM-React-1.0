@@ -5,9 +5,9 @@ interface AppState {
   toggleSidebar: () => void
   currentUser: {
     name: string
-    avatar: string
     role: string
   }
+  setCurrentUser: (user: AppState['currentUser']) => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -16,7 +16,7 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
   currentUser: {
     name: '张明',
-    avatar: '',
     role: '渠道销售经理',
   },
+  setCurrentUser: (user) => set({ currentUser: user }),
 }))

@@ -10,6 +10,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useMemo } from 'react'
 import { useAppStore } from '@/stores/useAppStore'
+import { clearAuthCookie } from '@/utils/auth'
 import { useGlobalSearch } from '@/hooks/useDashboard'
 import { useDebounce } from '@/utils/useDebounce'
 
@@ -27,6 +28,7 @@ export default function HeaderBar() {
   const location = useLocation()
   const navigate = useNavigate()
   const currentUser = useAppStore((s) => s.currentUser)
+  const setCurrentUser = useAppStore((s) => s.setCurrentUser)
   const [searchKeyword, setSearchKeyword] = useState('')
 
   const basePath = '/' + location.pathname.split('/')[1]
@@ -100,7 +102,19 @@ export default function HeaderBar() {
 
   const userMenuItems = [
     { key: 'settings', icon: <SettingOutlined />, label: '设置' },
-    { key: 'logout', icon: <LogoutOutlined />, label: '退出登录' },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: '退出登录',
+      onClick: () => {
+        clearAuthCookie()
+        setCurrentUser({
+          name: '未登录',
+          role: '',
+        })
+        navigate('/login')
+      },
+    },
   ]
 
   return (
