@@ -1,0 +1,67 @@
+---
+description: CRM React 项目总览 - 技术栈、架构约定、文件命名规范
+alwaysApply: true
+---
+
+# CRM React 项目总览
+
+## 项目用户
+- 渠道销售⼈员
+
+## 的核⼼诉求
+- 快速了解公司在售基⾦产品的关键信息（类型、净值、规模、状态等）
+- 维护客户关系，记录跟进情况
+- 快速查询"某个客户买了哪些产品"或"某个产品被哪些客户持有"
+
+## 技术栈
+
+- **构建**: Vite 6 + TypeScript 5.7
+- **框架**: React 18 + React Router v6
+- **UI**: Ant Design 5 + Recharts 2
+- **状态管理**: Zustand 5（UI/筛选状态）+ React Query 5（服务端数据）
+- **HTTP**: Axios
+- **Mock**: MSW 2（开发环境 API 模拟）
+- **日期**: dayjs
+- **语言**: 中文界面
+
+## 项目结构
+
+```
+src/
+├── components/    # 可复用组件，按功能分目录（layout/, dashboard/, products/）
+├── hooks/         # React Query 自定义 hooks（useProducts, useClients, useDashboard）
+├── mocks/         # MSW mock 数据和 handlers
+├── pages/         # 页面组件，按模块分目录（products/, clients/）
+├── services/      # API service 层，封装 Axios 请求
+├── stores/        # Zustand store（useAppStore, useFilterStore）
+├── styles/        # 全局 CSS 和 CSS 变量
+├── types/         # TypeScript 类型定义
+└── utils/         # 工具函数和常量
+```
+
+## 数据流
+
+```
+组件 → hooks (React Query) → services (Axios) → MSW / 真实 API
+```
+
+## 文件命名约定
+
+| 类型 | 命名 | 示例 |
+|------|------|------|
+| 页面/组件 | PascalCase `.tsx` | `ProductList.tsx` |
+| Hooks | camelCase + `use` 前缀 `.ts` | `useProducts.ts` |
+| Store | camelCase + `use` 前缀 `.ts` | `useAppStore.ts` |
+| Service | camelCase `.ts` | `productService.ts` |
+| 类型 | camelCase `.ts` | `product.ts` |
+| Mock Handler | camelCase `.ts` | `productHandlers.ts` |
+
+## 路径别名
+
+统一使用 `@/` 指向 `src/`，例如 `import { useProducts } from '@/hooks/useProducts'`
+
+## 导入顺序
+
+1. React / 第三方库
+2. 内部模块（`@/` 路径）
+3. 类型导入（`type` 关键字）

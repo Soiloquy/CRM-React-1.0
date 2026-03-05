@@ -1,0 +1,50 @@
+---
+description: MSW Mock 数据规范 - handler 编写、mock 数据组织
+globs: "src/mocks/**/*.ts"
+alwaysApply: false
+---
+
+# MSW Mock 规范
+
+## 目录结构
+
+```
+src/mocks/
+├── browser.ts          # setupWorker 入口
+├── handlers/
+│   ├── index.ts        # 汇总所有 handlers
+│   ├── productHandlers.ts
+│   ├── clientHandlers.ts
+│   └── dashboardHandlers.ts
+└── data/
+    ├── products.ts     # mock 数据
+    ├── clients.ts
+    ├── holdings.ts
+    └── followUps.ts
+```
+
+## Handler 编写
+
+使用 MSW v2 语法，handler 放在对应模块文件中：
+
+```ts
+import { http, HttpResponse } from 'msw'
+import { products } from '../data/products'
+
+export const productHandlers = [
+  http.get('/api/products', ({ request }) => {
+    const url = new URL(request.url)
+    const type = url.searchParams.get('type')
+    let result = [...products]
+    if (type) result = result.filter(p => p.type === type)
+    return HttpResponse.json(result)
+  }),
+]
+```
+
+## 约定
+
+- 所有 handler 路径必须以 `/api/` 开头，与 Service 层一致
+- 新增 handler 后必须在 `handlers/index.ts` 中汇总导出
+- Mock 数据文件放在 `data/` 目录，使用具名导出
+- `browser.ts` 中 `onUnhandledRequest: 'bypass'` 放行未匹配的请求

@@ -1,0 +1,34 @@
+---
+description: 样式规范 - Ant Design 主题、全局 CSS 变量、样式编写方式
+globs: "**/*.tsx,**/*.css"
+alwaysApply: false
+---
+
+# 样式规范
+
+## 样式方案
+
+- **Ant Design 主题**：通过 `ConfigProvider` 的 `theme.token` 配置主色和圆角
+- **全局 CSS 变量**：定义在 `src/styles/global.css`，用于自定义样式
+- **内联样式**：简单样式直接用 `style={{}}`
+- 不使用 CSS Modules 或 Tailwind
+
+## CSS 变量（在 global.css 中定义）
+
+```css
+--color-primary        /* 主色 */
+--color-success/warning/error
+--color-bg-layout      /* 布局背景色 */
+--color-bg-container   /* 容器背景色 */
+--color-text-primary/secondary/tertiary
+--color-border
+--sidebar-width / --sidebar-collapsed-width / --header-height
+```
+
+## 约定
+
+- 新增全局样式变量在 `src/styles/global.css` 中定义
+- 优先使用 Ant Design 组件自带的样式 props（`size`, `type`, `style`）
+- 页面级自定义样式通过 class 写在 `global.css` 中
+- Ant Design 主色配置集中在 `App.tsx` 的 `ConfigProvider`
+- 颜色值优先引用 CSS 变量，避免硬编码

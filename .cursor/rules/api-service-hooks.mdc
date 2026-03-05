@@ -1,0 +1,56 @@
+---
+description: API/Service/Hooks 数据层规范 - 接口封装、数据请求、自定义 hooks
+globs: "src/services/**/*.ts,src/hooks/**/*.ts"
+alwaysApply: false
+---
+
+# 数据层规范
+
+## 三层架构
+
+每个业务模块遵循三层封装：
+
+1. **Service 层** (`services/xxxService.ts`) — 封装 Axios 请求
+2. **Hook 层** (`hooks/useXxx.ts`) — 用 React Query 包装 service 调用
+3. **组件层** — 调用 hook 获取数据
+
+## Service 层
+
+基于统一的 Axios 实例 (`services/api.ts`)，使用命名导出对象：
+
+```ts
+import api from './api'
+import type { Product } from '@/types/product'
+
+export const productService = {
+  getList(params?: { type?: string; status?: string }) {
+    return api.get<Product[]>('/products', { params })
+  },
+  getDetail(id: string) {
+    return api.get<Product>(`/products/${id}`)
+  },
+}
+```
+
+## Hook 层
+
+使用 React Query 封装，导出命名函数：
+
+```ts
+import { useQuery } from '@tanstack/react-query'
+import { productService } from '@/services/productService'
+
+export function useProducts(params?: { type?: string }) {
+  return useQuery({
+    queryKey: ['products', params],
+    queryFn: () => productService.getList(params),
+  })
+}
+```
+
+## 约定
+
+- API baseURL 为 `/api`，由 `services/api.ts` 统一配置
+- 响应拦截器已处理 `response.data` 解包
+- React Query 全局配置：`refetchOnWindowFocus: false`，`retry: 1`
+- `queryKey` 必须包含请求参数以确保缓存正确
