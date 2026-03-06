@@ -11,7 +11,7 @@ import type {
 } from '@/agent/types'
 import { tools } from '@/agent/tools'
 
-const AGENT_BASE_URL = 'http://localhost:4000'
+const AGENT_BASE_URL = import.meta.env.VITE_AGENT_BASE_URL || ''
 
 async function callAgentAPI(body: {
   messages: ChatMessage[]
