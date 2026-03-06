@@ -59,12 +59,8 @@ export const dashboardHandlers = [
 
   // 以“产品类型 × 客户风险等级”构建交叉表
   http.get('/api/dashboard/risk-type-analysis', () => {
-    // Build a cross-tabulation of product type (X) vs client risk level (stacked)
-    // For each holding, find the product type and the client risk level,
-    // then accumulate the holding amount.
     const crossMap = new Map<string, { low: number; medium: number; high: number }>()
 
-    // Initialize all active product types
     const activeTypes = new Set(
       mockProducts.filter((p) => p.status === 'active').map((p) => p.type)
     )
@@ -72,18 +68,15 @@ export const dashboardHandlers = [
       crossMap.set(type, { low: 0, medium: 0, high: 0 })
     })
 
-    // Map client risk levels to low/medium/high buckets
     const riskBucket = (riskLevel: string): 'low' | 'medium' | 'high' => {
       if (riskLevel === 'conservative' || riskLevel === 'stable') return 'low'
       if (riskLevel === 'balanced') return 'medium'
-      return 'high' // aggressive, radical
+      return 'high' 
     }
 
-    // Build product id -> type lookup
     const productTypeMap = new Map(mockProducts.map((p) => [p.id, p.type]))
-    // Build client id -> riskLevel lookup
     const clientRiskMap = new Map(mockClients.map((c) => [c.id, c.riskLevel]))
-
+    // 遍历所有持仓，根据产品类型和客户风险等级累加持仓金额。
     mockHoldings.forEach((holding) => {
       const productType = productTypeMap.get(holding.productId)
       const clientRisk = clientRiskMap.get(holding.clientId)
@@ -105,7 +98,7 @@ export const dashboardHandlers = [
     return HttpResponse.json(result)
   }),
 
-  // New client trend - 6 months line chart
+  // 随机生成近 6 个月新增客户趋势
   http.get('/api/dashboard/new-client-trend', () => {
     const now = new Date()
     const months: Array<{ month: string; count: number }> = []
@@ -120,7 +113,6 @@ export const dashboardHandlers = [
         return cd >= d && cd < nextMonth
       }).length
 
-      // Ensure at least some data for visual interest
       months.push({
         month: monthStr,
         count: Math.max(count, 2 + Math.floor(Math.random() * 6)),
@@ -130,12 +122,12 @@ export const dashboardHandlers = [
     return HttpResponse.json(months)
   }),
 
-  // Recent follow-ups
+  // 返回 mockFollowUps 的前 10 条，给首页最近跟进列表使用。
   http.get('/api/dashboard/recent-follow-ups', () => {
     return HttpResponse.json(mockFollowUps.slice(0, 10))
   }),
 
-  // Legacy trend endpoint (still available)
+  // 废弃接口，用于生成最近 12 个月的 AUM 曲线
   http.get('/api/dashboard/trend', () => {
     const months: Array<{ month: string; aum: number }> = []
     const now = new Date()
@@ -156,7 +148,7 @@ export const dashboardHandlers = [
     return HttpResponse.json(months)
   }),
 
-  // Global search
+  // 全局搜索
   http.get('/api/search', ({ request }) => {
     const url = new URL(request.url)
     const keyword = (url.searchParams.get('keyword') || '').toLowerCase()

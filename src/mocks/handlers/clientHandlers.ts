@@ -4,6 +4,7 @@ import { mockHoldings } from '../data/holdings'
 import { mockFollowUps } from '../data/followUps'
 
 export const clientHandlers = [
+  // 分页、筛选、搜索客户列表
   http.get('/api/clients', ({ request }) => {
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '1')
@@ -37,6 +38,7 @@ export const clientHandlers = [
     return HttpResponse.json({ data, total, page, pageSize })
   }),
 
+  // 返回单个客户基本信息，不存在则 404
   http.get('/api/clients/:id', ({ params }) => {
     const client = mockClients.find((c) => c.id === params.id)
     if (!client) {
@@ -45,11 +47,13 @@ export const clientHandlers = [
     return HttpResponse.json(client)
   }),
 
+  // 返回该客户的所有持仓
   http.get('/api/clients/:id/holdings', ({ params }) => {
     const holdings = mockHoldings.filter((h) => h.clientId === params.id)
     return HttpResponse.json(holdings)
   }),
 
+  // 获取该客户的跟进记录
   http.get('/api/clients/:id/follow-ups', ({ params }) => {
     const followUps = mockFollowUps
       .filter((f) => f.clientId === params.id)
@@ -57,6 +61,7 @@ export const clientHandlers = [
     return HttpResponse.json(followUps)
   }),
 
+  // 新增跟进记录
   http.post('/api/clients/:id/follow-ups', async ({ params, request }) => {
     const body = (await request.json()) as { type: string; content: string; createdBy: string }
     const client = mockClients.find((c) => c.id === params.id)

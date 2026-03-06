@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import KeepAlive from 'react-activation'
 import AppLayout from './components/layout/AppLayout'
 import Dashboard from './pages/Dashboard'
 import ProductList from './pages/products/ProductList'
@@ -36,7 +37,14 @@ export default function AppRouter() {
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="clients" element={<ClientList />} />
         <Route path="clients/:id" element={<ClientDetail />} />
-        <Route path="ai-agent" element={<AIAgent />} />
+        <Route
+          path="ai-agent"
+          element={
+            <KeepAlive id="ai-agent" name="ai-agent">
+              <AIAgent />
+            </KeepAlive>
+          }
+        />
       </Route>
       <Route path="/login" element={<Login />} />
     </Routes>
