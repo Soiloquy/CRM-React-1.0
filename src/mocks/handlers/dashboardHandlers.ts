@@ -4,10 +4,10 @@ import { mockClients } from '../data/clients'
 import { mockHoldings } from '../data/holdings'
 import { mockFollowUps } from '../data/followUps'
 import { PRODUCT_TYPE_MAP } from '@/types/product'
-import { CLIENT_RISK_LEVEL_MAP } from '@/types/client'
+// import { CLIENT_RISK_LEVEL_MAP } from '@/types/client'
 
 export const dashboardHandlers = [
-  // Stats endpoint - now includes totalProducts and newSubscriptionAmount
+    // 总产品数、在售产品数、总客户数、本月新增客户数、本月新申购金额
   http.get('/api/dashboard/stats', () => {
     const totalProducts = mockProducts.length
     const activeProducts = mockProducts.filter((p) => p.status === 'active').length
@@ -33,7 +33,7 @@ export const dashboardHandlers = [
     })
   }),
 
-  // Type distribution - pie chart: product type scale distribution
+  // 按产品 `type` 聚合在售产品的数量和规模，生成饼图数据。
   http.get('/api/dashboard/type-distribution', () => {
     const typeMap = new Map<string, { count: number; scale: number }>()
 
@@ -57,7 +57,7 @@ export const dashboardHandlers = [
     return HttpResponse.json(distribution)
   }),
 
-  // Risk x Product Type cross analysis - stacked bar chart
+  // 以“产品类型 × 客户风险等级”构建交叉表
   http.get('/api/dashboard/risk-type-analysis', () => {
     // Build a cross-tabulation of product type (X) vs client risk level (stacked)
     // For each holding, find the product type and the client risk level,

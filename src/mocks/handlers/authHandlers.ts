@@ -42,7 +42,7 @@ export const authHandlers = [
     const { phone, code } = body
 
     const isValidPhone = phone === `+86${VALID_USER.phone}`
-    const isValidCode = !!code
+    const isValidCode = code === '123456'
 
     if (!isValidPhone) {
       return HttpResponse.json(

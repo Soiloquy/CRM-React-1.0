@@ -1,8 +1,9 @@
 /**
  * Tool 路由器：根据 ParsedIntent 选择并执行对应 Tool
+ * 废弃的tool，用于显示Agent推理步骤的
  */
 
-import type { ParsedIntent, ToolResult, ReasoningStep } from './types'
+import type { ParsedIntent, ToolResult,ReasoningStep } from './types'
 import { tools } from './tools'
 
 function createStep(step: number, phase: ReasoningStep['phase'], message: string, payload?: unknown): ReasoningStep {

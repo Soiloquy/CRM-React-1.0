@@ -18,6 +18,8 @@ import {
   PRODUCT_TYPE_MAP,
   PRODUCT_STATUS_MAP,
   PRODUCT_STATUS_COLOR,
+  RISK_LEVEL_MAP,
+  RISK_LEVEL_COLOR,
 } from '@/types/product'
 import { formatCurrency, formatPercent, formatNav, formatDate } from '@/utils/format'
 import type { Holding } from '@/types/holding'
@@ -54,17 +56,8 @@ export default function ProductDetail() {
     )
   }
 
-  const riskLevelMap: Record<string, { label: string; color: string }> = {
-    conservative: { label: '保守', color: 'green' },
-    stable: { label: '稳健', color: 'blue' },
-    balanced: { label: '平衡', color: 'gold' },
-    aggressive: { label: '积极', color: 'orange' },
-    radical: { label: '激进', color: 'red' },
-  }
-  const riskInfo = riskLevelMap[product.riskLevel] || {
-    label: product.riskLevel,
-    color: 'default',
-  }
+  const riskLabel = RISK_LEVEL_MAP[product.riskLevel] || product.riskLevel
+  const riskColor = RISK_LEVEL_COLOR[product.riskLevel] || 'default'
 
   const holderColumns: ColumnsType<Holding> = [
     {
@@ -127,7 +120,7 @@ export default function ProductDetail() {
             </Tag>
           </Descriptions.Item>
           <Descriptions.Item label="风险等级">
-            <Tag color={riskInfo.color}>{riskInfo.label}</Tag>
+            <Tag color={riskColor}>{riskLabel}</Tag>
           </Descriptions.Item>
           <Descriptions.Item label="基金经理">{product.manager}</Descriptions.Item>
           <Descriptions.Item label="最新净值">

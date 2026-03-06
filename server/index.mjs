@@ -72,7 +72,7 @@ app.use(express.json())
 
 /**
  * 调用真实 LLM，将用户输入解析为 ParsedIntent
- * 这里以 DeepSeek 的 OpenAI 兼容接口为例，你可以根据实际厂商调整实现。
+ * 这里为 DeepSeek 的 OpenAI 兼容接口
  */
 async function callLLMIntentParser(input) {
   const apiKey = process.env.DEEPSEEK_API_KEY || process.env.OPENAI_API_KEY

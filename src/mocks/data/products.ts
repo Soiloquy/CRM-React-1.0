@@ -91,7 +91,7 @@ function randomDate(startYear: number, endYear: number): string {
   return d.toISOString().split('T')[0]
 }
 
-const riskLevels = ['conservative', 'stable', 'balanced', 'aggressive', 'radical'] as const
+const riskLevels: Array<'low' | 'medium' | 'high'> = ['low', 'medium', 'high']
 
 export const mockProducts: Product[] = productTemplates.map((tpl, idx) => {
   const navHistory = generateNavHistory(tpl.navBase)
@@ -114,10 +114,10 @@ export const mockProducts: Product[] = productTemplates.map((tpl, idx) => {
     custodian: custodians[idx % custodians.length],
     establishDate: randomDate(2015, 2023),
     riskLevel: tpl.type === 'money_market'
-      ? 'conservative'
+      ? 'low'
       : tpl.type === 'bond'
         ? riskLevels[Math.floor(Math.random() * 2)]
-        : riskLevels[Math.floor(Math.random() * 5)],
+        : riskLevels[Math.floor(Math.random() * 3)],
     description: `${tpl.name}是一款${tpl.type === 'equity' ? '股票型' : tpl.type === 'bond' ? '债券型' : tpl.type === 'hybrid' ? '混合型' : tpl.type === 'money_market' ? '货币型' : tpl.type === 'index' ? '指数型' : 'QDII'}基金，由经验丰富的基金经理管理，致力于为投资者创造稳健回报。`,
     navHistory,
   }

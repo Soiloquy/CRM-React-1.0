@@ -6,6 +6,8 @@ import {
   PRODUCT_TYPE_MAP,
   PRODUCT_STATUS_MAP,
   PRODUCT_STATUS_COLOR,
+  RISK_LEVEL_MAP,
+  RISK_LEVEL_COLOR,
 } from '@/types/product'
 import { formatCurrency, formatPercent, formatNav, formatDate } from '@/utils/format'
 import type { Holding } from '@/types/holding'
@@ -20,14 +22,6 @@ interface Props {
   afterOpenChange?: (open: boolean) => void
 }
 
-// 将底层 5 档风险映射为 3 档展示：低风险 / 中风险 / 高风险
-const riskLevelMap: Record<string, { label: string; color: string }> = {
-  conservative: { label: '低风险', color: 'green' },
-  stable: { label: '低风险', color: 'green' },
-  balanced: { label: '中风险', color: 'orange' },
-  aggressive: { label: '高风险', color: 'red' },
-  radical: { label: '高风险', color: 'red' },
-}
 
 export default function ProductDetailDrawer({ productId, open, onClose, afterOpenChange }: Props) {
   const { data: product, isLoading, error } = useProductDetail(productId || '')
@@ -46,13 +40,10 @@ export default function ProductDetailDrawer({ productId, open, onClose, afterOpe
       dataIndex: 'clientId',
       width: 90,
       render: (_: string, record: Holding) => {
-        // We match clientName to approximate risk level from holding data
-        // In a real app, the API would include this field directly
-        const riskKeys = Object.keys(riskLevelMap)
-        const idx = record.clientName.charCodeAt(0) % riskKeys.length
-        const risk = riskKeys[idx]
-        const info = riskLevelMap[risk]
-        return <Tag color={info.color}>{info.label}</Tag>
+        const keys: Array<'low' | 'medium' | 'high'> = ['low', 'medium', 'high']
+        const idx = record.clientName.charCodeAt(0) % keys.length
+        const level = keys[idx]
+        return <Tag color={RISK_LEVEL_COLOR[level]}>{RISK_LEVEL_MAP[level]}</Tag>
       },
     },
     {
@@ -110,8 +101,8 @@ export default function ProductDetailDrawer({ productId, open, onClose, afterOpe
               <Descriptions.Item label="基金经理">{product.manager}</Descriptions.Item>
               <Descriptions.Item label="成立日期">{formatDate(product.establishDate)}</Descriptions.Item>
               <Descriptions.Item label="风险等级">
-                <Tag color={riskLevelMap[product.riskLevel]?.color || 'default'}>
-                  {riskLevelMap[product.riskLevel]?.label || product.riskLevel}
+                <Tag color={RISK_LEVEL_COLOR[product.riskLevel] || 'default'}>
+                  {RISK_LEVEL_MAP[product.riskLevel] || product.riskLevel}
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item label="公司 AUM 占比">

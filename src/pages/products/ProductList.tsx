@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useDebounce } from '@/utils/useDebounce'
-import { Table, Card, Input, Select, Space, Tag, Button, Row, Col, Empty } from 'antd'
+import { Table, Card, Input, Select, Tag, Button, Row, Col, Empty } from 'antd'
 import {
   SearchOutlined,
   ClearOutlined,
@@ -14,8 +15,11 @@ import {
   PRODUCT_TYPE_MAP,
   PRODUCT_STATUS_MAP,
   PRODUCT_STATUS_COLOR,
+  RISK_LEVEL_MAP,
+  RISK_LEVEL_COLOR,
   type ProductType,
   type ProductStatus,
+  type RiskLevel,
 } from '@/types/product'
 import type { ProductWithHolderCount } from '@/services/productService'
 import type { ColumnsType } from 'antd/es/table'
@@ -82,14 +86,6 @@ export default function ProductList() {
     setDrawerOpen(true)
   }
 
-  // 将底层 5 档风险映射为 3 档展示：低风险 / 中风险 / 高风险
-  const riskLevelMap: Record<string, { label: string; color: string }> = {
-    conservative: { label: '低风险', color: 'green' },
-    stable: { label: '低风险', color: 'green' },
-    balanced: { label: '中风险', color: 'orange' },
-    aggressive: { label: '高风险', color: 'red' },
-    radical: { label: '高风险', color: 'red' },
-  }
 
   const columns: ColumnsType<ProductWithHolderCount> = [
     {
@@ -99,15 +95,12 @@ export default function ProductList() {
       ellipsis: true,
       render: (name: string, record) => (
         <div>
-          <a
-            onClick={(e) => {
-              e.stopPropagation()
-              handleViewDetail(record.id)
-            }}
+          <Link
+            to={`/products/${record.id}`}
             style={{ fontWeight: 500 }}
           >
             {name}
-          </a>
+          </Link>
           {record.status === 'raising' && (
             <Tag
               icon={<FireOutlined />}
@@ -189,10 +182,11 @@ export default function ProductList() {
       title: '风险等级',
       dataIndex: 'riskLevel',
       width: 90,
-      render: (level: string) => {
-        const info = riskLevelMap[level] || { label: level, color: 'default' }
-        return <Tag color={info.color} style={{ borderRadius: 4 }}>{info.label}</Tag>
-      },
+      render: (level: RiskLevel) => (
+        <Tag color={RISK_LEVEL_COLOR[level]} style={{ borderRadius: 4 }}>
+          {RISK_LEVEL_MAP[level]}
+        </Tag>
+      ),
     },
     {
       title: '操作',
@@ -337,13 +331,6 @@ export default function ProductList() {
             style: { padding: '0 16px' },
           }}
           scroll={{ x: 1000 }}
-          onRow={(record) => ({
-            onClick: () => handleViewDetail(record.id),
-            style: {
-              cursor: 'pointer',
-              transition: 'background 0.15s ease',
-            },
-          })}
           locale={{
             emptyText: (
               <Empty

@@ -2,6 +2,7 @@ import type { Holding } from '@/types/holding'
 import { mockProducts } from './products'
 import { mockClients } from './clients'
 
+// 买入日期随机生成
 function randomDate(startYear: number, endYear: number): string {
   const start = new Date(startYear, 0, 1).getTime()
   const end = new Date(endYear, 11, 31).getTime()
@@ -23,6 +24,7 @@ for (let i = 0; i < 55; i++) {
   holdingPairs.push([clientIdx, productIdx])
 }
 
+//生成 shares（份额）、amount（市值）、buyDate（买入日期）、returnRate（收益率）
 export const mockHoldings: Holding[] = holdingPairs.map(([ci, pi], idx) => {
   const client = mockClients[ci]
   const product = mockProducts[pi]

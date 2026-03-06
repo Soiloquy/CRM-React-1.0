@@ -27,12 +27,19 @@ export type ProductType =
 
 export type ProductStatus = 'active' | 'raising' | 'suspended' | 'liquidated'
 
-export type RiskLevel =
-  | 'conservative'
-  | 'stable'
-  | 'balanced'
-  | 'aggressive'
-  | 'radical'
+export type RiskLevel = 'low' | 'medium' | 'high'
+
+export const RISK_LEVEL_MAP: Record<RiskLevel, string> = {
+  low: '低风险',
+  medium: '中风险',
+  high: '高风险',
+}
+
+export const RISK_LEVEL_COLOR: Record<RiskLevel, string> = {
+  low: 'green',
+  medium: 'orange',
+  high: 'red',
+}
 
 export interface NavPoint {
   date: string

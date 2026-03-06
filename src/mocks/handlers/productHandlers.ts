@@ -5,6 +5,7 @@ import { PRODUCT_TYPE_MAP } from '@/types/product'
 import { mockHoldings } from '../data/holdings'
 
 export const productHandlers = [
+  // 支持分页、筛选、搜索、排序
   http.get('/api/products', ({ request }) => {
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '1')

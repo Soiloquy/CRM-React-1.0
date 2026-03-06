@@ -268,8 +268,8 @@ const tools: ToolDefinition[] = [
         pageSize: 200,
       })
       const all = res.data as ProductWithHolderCount[]
-      const risky = all.filter((p) => p.riskLevel === 'aggressive' || p.riskLevel === 'radical')
-      const summaryList = risky.slice(0, 20).map((p) => `${p.name}（${p.code}，风险等级：${p.riskLevel}）`)
+      const risky = all.filter((p) => p.riskLevel === 'high')
+      const summaryList = risky.slice(0, 20).map((p) => `${p.name}（${p.code}，风险等级：高风险）`)
       const summary = risky.length
         ? `当前共 ${risky.length} 只高风险产品，示例：\n` + summaryList.join('\n')
         : '当前暂无标记为高风险的产品。'

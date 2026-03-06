@@ -3,9 +3,9 @@
  * 统一异常处理，保证行为可控、可观测、可替换
  */
 
-import { parseIntent, parseIntentLLM } from './intentParser'
+import { parseIntent, parseIntentLLM} from './intentParser'
+import type {  ParsedIntent,AgentExecutionResult,ReasoningStep } from './types'
 import { routeAndExecute } from './toolRouter'
-import type { AgentExecutionResult, ParsedIntent, ReasoningStep } from './types'
 
 // 简单的会话上下文，用于处理“分别是什么 / 有哪些”这类后续提问
 const lastContext: {
