@@ -29,7 +29,11 @@ const defaultProductFilters = {
   sortBy: '',
   sortOrder: 'desc' as const,
 }
-const defaultClientFilters = { level: '' as const, riskLevel: '' as const, keyword: '' }
+const defaultClientFilters = { 
+  level: '' as const,
+  riskLevel: '' as const,
+  keyword: '' 
+}
 
 export const useFilterStore = create<FilterState>((set, get) => ({
   productFilters: { ...defaultProductFilters },

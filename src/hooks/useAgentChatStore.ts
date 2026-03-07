@@ -11,7 +11,7 @@ import type { AgentChatMessage, ChatMessage, ChartItem } from '@/agent/types'
 // ─── 推荐问题池 ──────────────────────────────────────────────────────────────
 const ALL_SUGGESTIONS = [
   '目前在售基金产品有多少？',
-  '张三持有哪些基金？',
+  '李芳持有哪些基金？',
   '帮我搜索一下华夏基金',
   '当前高风险产品有哪些？',
   '整体客户和产品情况怎么样？',
@@ -37,6 +37,7 @@ interface PersistedState {
   lastSummarizedCount: number
 }
 
+// 加载持久化状态，查看SessionStorage中的数据
 function loadPersistedState(): PersistedState {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY)
@@ -54,6 +55,7 @@ function loadPersistedState(): PersistedState {
   }
 }
 
+// 加载推荐的问题
 function loadSuggestions(): string[] {
   try {
     const raw = sessionStorage.getItem(SUGGESTIONS_KEY)
@@ -69,7 +71,7 @@ function loadSuggestions(): string[] {
   return suggestions
 }
 
-// ─── Store 类型 ──────────────────────────────────────────────────────────────
+// Store 类型 
 interface AgentChatStore {
   messages: AgentChatMessage[]
   isLoading: boolean
